@@ -11,17 +11,30 @@ datasource db {
 }
 
 model Task {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(255)
-  dueDate     String   @db.VarChar(10)
-  status      Status   @default(NOT_STARTED)
-  description String?
-  createdAt   DateTime @default(now()) @db.Timestamp(0)
-  updatedAt   DateTime @updatedAt @db.Timestamp(0)
+  id          Int      @id @default(autoincrement()) // Taskの一意のID。デフォルトでは自動インクリメントされる。
+  name        String   @db.VarChar(255) // Taskの名前。DBカラムの型はVarChar(255)。
+  dueDate     String   @db.VarChar(10) // Taskの期限日。DBカラムの型はVarChar(10)。
+  status      Status   @default(NOT_STARTED) // Taskのステータス。デフォルトはNOT_STARTED。
+  description String? // Taskの詳細な説明。Null値が許可される。
+  createdAt   DateTime @default(now()) @db.Timestamp(0) // Taskが作成された時間。デフォルトは現在時刻。DBカラムの型はTimestamp。
+  updatedAt   DateTime @updatedAt @db.Timestamp(0) // Taskが最後に更新された時間。自動的に更新される。DBカラムの型はTimestamp。
+  userId      Int // このTaskが所属するUserのID。 
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade) // UserとTaskの間のリレーション。TaskはUserに所属する。Userが削除されると、そのUserに属するTaskも削除される（onDelete: Cascade）。
 }
 
 enum Status {
-  NOT_STARTED
-  IN_PROGRESS
-  COMPLETED
+  NOT_STARTED // タスクがまだ始まっていない状態
+  IN_PROGRESS // タスクが進行中の状態
+  COMPLETED // タスクが完了した状態
 }
+
+model User {
+  id        Int      @id @default(autoincrement()) // Userの一意のID。デフォルトでは自動インクリメントされる。
+  name      String   @db.VarChar(255) // Userの名前。DBカラムの型はVarChar(255)。
+  email     String   @unique @db.VarChar(255) // UserのEメールアドレス。一意の値でなければならない。DBカラムの型はVarChar(255)。
+  password  String   @db.VarChar(255) // Userのパスワード。DBカラムの型はVarChar(255)。
+  createdAt DateTime @default(now()) @db.Timestamp(0) // Userが作成された時間。デフォルトは現在時刻。DBカラムの型はTimestamp。
+  updatedAt DateTime @updatedAt @db.Timestamp(0) // Userが最後に更新された時間。自動的に更新される。DBカラムの型はTimestamp。
+  task      Task[] // Userが所有するTaskのリスト。一つのUserが複数のTaskを所有することが可能（1対多のリレーション）。
+}
+

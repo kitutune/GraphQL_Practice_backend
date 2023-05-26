@@ -13,12 +13,13 @@ export class TaskService {
   }
 
   async createTask(createTaskInput: CreateTaskInput): Promise<Task> {
-    const { name, dueDate, description } = createTaskInput;
+    const { name, dueDate, description, userId } = createTaskInput;
     return await this.prismaService.task.create({
       data: {
         name,
         dueDate,
         description,
+        userId,
       },
     });
   }
@@ -27,6 +28,13 @@ export class TaskService {
     const { id, name, dueDate, status, description } = updateTaskInput;
     return await this.prismaService.task.update({
       data: { name, dueDate, status, description },
+      // どのデータを更新するのかをwhereに条件として渡す
+      where: { id },
+    });
+  }
+
+  async deleteTask(id: number): Promise<Task> {
+    return await this.prismaService.task.delete({
       // どのデータを更新するのかをwhereに条件として渡す
       where: { id },
     });
