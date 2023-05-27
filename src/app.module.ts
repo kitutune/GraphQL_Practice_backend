@@ -5,6 +5,7 @@ import { join } from 'path';
 import { TaskModule } from './task/task.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PrismaService } from './prisma/prisma.service';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PrismaService } from './prisma/prisma.service';
     // 自動で入る
     TaskModule,
     PrismaModule,
+    UserModule,
   ],
   providers: [PrismaService],
 })
