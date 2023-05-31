@@ -38,7 +38,8 @@ export class TaskResolver {
 
   @Mutation(() => TaskModel) // Mutation デコレータは、このメソッドが GraphQL ミューテーションであることを示します
   @UseGuards(JwtAuthGuard) // UseGuards デコレータは、このミューテーションが JwtAuthGuard によって保護されることを示します
-  async deleteTask(@Args('id', { type: () => Int }) id: number): Promise<Task> { // Args デコレータは、ミューテーションの引数を取得します。ここでは、id を引数として取得します
+  async deleteTask(@Args('id', { type: () => Int }) id: number): Promise<Task> {
+    // Args デコレータは、ミューテーションの引数を取得します。ここでは、id を引数として取得します
     return await this.taskService.deleteTask(id); // TaskService の deleteTask メソッドを呼び出して結果を返します
   }
 }
