@@ -5,8 +5,8 @@ import { UserService } from './user.service';
 import { User as UserModel } from './models/user.model';
 import { GetUserArgs } from './dto/getUser.args';
 // import { GetUserArgs } from './dto/getUser.args';
-// import { UseGuards } from '@nestjs/common';
-// import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver()
 export class UserResolver {
@@ -21,7 +21,7 @@ export class UserResolver {
 
   //登録されていないemailの場合はnullを返すようにする;
   @Query(() => UserModel, { nullable: true })
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   // インプット項目が@ArgsTypeの場合は@Args()の中に何も指定しない
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
     return await this.userService.getUser(getUserArgs.email);
